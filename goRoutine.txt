@@ -1,0 +1,28 @@
+1. when we run the program ONE go routine automatically created
+2. go routine execute code line by line
+3. with current project, http.Get(link) (blocking call) will take some time to get response and main go routine that created automatically cannot do anything until it gets response
+4. keyword "go" tell program to create new go routine and run the code on new routine and main routine can go through next code
+5. syntex:
+    go "function call"
+
+* There is go scheduler sit between one cpu core with many go routines
+* scheduler runs one routine until it finishes or makes a blocking call (http.Get request)
+* scheduler control go routines and if it finishes or blocked, scheduler will pause the routine and run the next go routine
+* by the default, go try to use only one core
+* change the go setting, scheduler can assign each go routine to each CPU core
+
+* concurrecy means that multiple routine's kind of at same time (scheduling routines truly only one routine can run at a time) (one care)
+* trully multiple go rouine can run at the same time on differen cores
+* when start the go program, there will be always one "main routine" created
+* other routine created by go keyword are call " child routines" which does not act same as main routine
+* go keyword only infront of function call
+
+* Because main routine does not care about the child routine finished or not, as long as main routine finished program terminates
+* so to prevent that issue, channel used to enable the communication between routines and that is only way in go
+* channel is TYPE just like int, string, etc. therefore ONLY ONE type can be assigned to it
+* syntax for channel 
+    (name of variable) := make(chan (type of variable to communicate))
+    go (function name) ((pass the channel variable))
+    func (function name) ((channel variable) chan (communication type))
+    (channel variable)<-(whatever variable to channel matched the comminication type)
+    <-(channel varible): assign the channel variable value to just like variable

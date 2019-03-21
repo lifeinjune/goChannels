@@ -7,17 +7,25 @@ import (
 
 func main() {
 	address := []string{"http://google.com", "http://facebook.com", "http://stackoverflow.com", "http://golang.org", "http://amazon.com"} //string slcie contain addresses
+	c := make(chan string)                                                                                                                // make the channel type call c
 	for _, a := range address {                                                                                                           //loop through each element in slice
-		checkAddress(a)
+		go checkAddress(a, c) //added go child routine and pass c as well
+	}
+	//fmt.Println(<-c) // main routine will wait for the response from the child routine, and only for fastest child routine complete which not going to wait for other child routine
+	for i := 0; i < len(address); i++ { //loop total of number of element in address slice
+		fmt.Println(<-c) //will hang untill receive data from child channel
 	}
 }
 
-func checkAddress(a string) {
+func checkAddress(a string, c chan string) { // accept the c channel type with communication type as well which is string
+
 	resp, err := http.Get(a) //get respons and error from address given
 	if err != nil {          //if there is error
 		fmt.Println("Error!", err) //print out the error statement
+		c <- "down"
 		return
-	} else { //otherwise
-		fmt.Println(a, "is", resp.Status) //print out address with it's status
+	} else {
+		fmt.Println(a, "status:", resp.Status) //print out address with it's status
+		c <- "up"
 	}
 }
