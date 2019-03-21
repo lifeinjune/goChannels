@@ -12,8 +12,9 @@ func main() {
 		go checkAddress(a, c) //added go child routine and pass c as well
 	}
 	//fmt.Println(<-c) // main routine will wait for the response from the child routine, and only for fastest child routine complete which not going to wait for other child routine
-	for { //infinite loop
-		go checkAddress(<-c, c) //wait until child routine finished and call it again
+	for l := range c { //infinite loop
+		//rang (channel variable) means that wait for the channel to return value
+		go checkAddress(l, c) //wait until child routine finished and call it again
 	}
 }
 
