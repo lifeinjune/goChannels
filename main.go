@@ -15,7 +15,7 @@ func main() {
 	//fmt.Println(<-c) // main routine will wait for the response from the child routine, and only for fastest child routine complete which not going to wait for other child routine
 	for l := range c { //infinite loop
 		//rang (channel variable) means that wait for the channel to return value
-		go func(address string) { //unnamed function to wrap around delay and no delay start up of child routine
+		go func(address string) { //unnamed function to wrap around delay and no delay start up of child routine (function literal)
 			time.Sleep(time.Second)  //delay which pause the current go routine after initial http.get
 			checkAddress(address, c) //do not share variables between different routine COPY IT~!
 		}(l)
